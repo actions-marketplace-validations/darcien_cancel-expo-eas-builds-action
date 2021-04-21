@@ -8,51 +8,14 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: step-1
-      shell: bash
-      run: |
-        npx -p eas-cli eas build:list --limit=${{ inputs.build-limit }}
-    - name: step-2
-      shell: bash
-      run: |
-        npx -p eas-cli eas build:list --limit=${{ inputs.build-limit }} |
-          grep -B 3 "Status *\(in queue\|in progress\)"
-    - name: step-3
+    - id: cancel-eas-builds
       shell: bash
       run: |
         npx -p eas-cli eas build:list --limit=${{ inputs.build-limit }} |
           grep -B 3 "Status *\(in queue\|in progress\)" |
-          grep ID
-    - name: step-4
-      shell: bash
-      run: |
-        npx -p eas-cli eas build:list --limit=${{ inputs.build-limit }} |
-          grep -B 3 "Status *\(in queue\|in progress\)" |
+          cat |
           grep ID |
-          sed -e 's|ID[[:space:]]\+||'
-    - name: step-5
-      shell: bash
-      run: |
-        npx -p eas-cli eas build:list --limit=${{ inputs.build-limit }} |
-          grep -B 3 "Status *\(in queue\|in progress\)" |
-          grep ID |
-          sed -e 's|ID[[:space:]]\+||' |
-          tr '\n' '\0'
-    - name: step-6
-      shell: bash
-      run: |
-        npx -p eas-cli eas build:list --limit=${{ inputs.build-limit }} |
-          grep -B 3 "Status *\(in queue\|in progress\)" |
-          grep ID |
+          cat |
           sed -e 's|ID[[:space:]]\+||' |
           tr '\n' '\0' |
-          xargs -0 -n1 --no-run-if-empty npx eas build:cancel
-    # - id: cancel-eas-builds
-    #   shell: bash
-    #   run: |
-    #     npx -p eas-cli eas build:list --limit=${{ inputs.build-limit }} |
-    #       grep -B 3 "Status *\(in queue\|in progress\)" |
-    #       grep ID |
-    #       sed -e 's|ID[[:space:]]\+||' |
-    #       tr '\n' '\0' |
-    #       xargs -0 -n1 --no-run-if-empty npx eas build:cancel
+          xargs -0 -n1 --no-run-if-empty npx -p eas-cli eas build:cancel
