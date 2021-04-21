@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
-echo "Checking last ${INPUT_BUILD_LIMIT} builds for in queue or in progress build..."
+# Runner issue: cannot read input from env directly in composite action
+# see https://github.com/actions/runner/issues/665
+BUILD_LIMIT=${INPUT_BUILD_LIMIT:-10}
 
-npx -p eas-cli eas build:list --limit=${INPUT_BUILD_LIMIT} |
+echo "Checking last ${BUILD_LIMIT} builds for in queue or in progress build..."
+
+npx -p eas-cli eas build:list --limit=${BUILD_LIMIT} |
   grep -B 3 "Status *\(in queue\|in progress\)" |
   grep ID |
   sed -e 's|ID[[:space:]]\+||' |
