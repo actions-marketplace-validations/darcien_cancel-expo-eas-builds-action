@@ -1,0 +1,19 @@
+name: 'Cancel Expo EAS Builds'
+description: 'Cancel EAS builds that are in queue or in progress'
+inputs:
+  build-limit:
+    description: 'Limit the amount of build to check. Default to the last 10 builds.'
+    required: false
+    default: '10'
+runs:
+  using: 'composite'
+  steps:
+    - id: cancel-eas-builds
+      shell: bash
+      run: |
+        eas build:list --limit=${{ inputs.build-limit }} |
+          grep -B 3 "Status *\(in queue\|in progress\)" |
+          grep ID |
+          sed -e 's|ID[[:space:]]\+||' |
+          tr '\n' '\0' |
+          xargs -0 -n1 eas build:cancel
