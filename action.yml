@@ -1,5 +1,8 @@
 name: 'Cancel Expo EAS Builds'
 description: 'Cancel EAS builds that are in queue or in progress'
+branding:
+  icon: terminal
+  color: gray-dark
 inputs:
   build_limit:
     description: 'Limit the amount of build to check. Default to the last 10 builds.'
