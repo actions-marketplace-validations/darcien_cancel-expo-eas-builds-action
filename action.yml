@@ -16,4 +16,4 @@ runs:
           grep ID |
           sed -e 's|ID[[:space:]]\+||' |
           tr '\n' '\0' |
-          xargs -0 -n1 npx eas build:cancel
+          xargs -0 -n1 --no-run-if-empty npx eas build:cancel
