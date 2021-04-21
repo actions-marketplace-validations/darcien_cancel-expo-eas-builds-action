@@ -11,7 +11,7 @@ runs:
     - id: cancel-eas-builds
       shell: bash
       run: |
-        npx eas build:list --limit=${{ inputs.build-limit }} |
+        npx -p eas-cli eas build:list --limit=${{ inputs.build-limit }} |
           grep -B 3 "Status *\(in queue\|in progress\)" |
           grep ID |
           sed -e 's|ID[[:space:]]\+||' |
