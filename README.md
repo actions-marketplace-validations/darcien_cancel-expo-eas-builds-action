@@ -17,7 +17,7 @@ Only the last 10 builds are checked by default.
 
 | expo-github-action | eas-cli | cancel-expo-eas-builds-action |
 | :----------------: | :-------: | :---------------------------: |
-|         v5         | <=0.18.x  |              v1               |
+|         v5         | <=0.30.x  |              v1               |
 
 # Usage
 
